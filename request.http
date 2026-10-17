@@ -1,0 +1,90 @@
+### ==========================================
+### CODELAB 04 - Excepciones y Manejo Global
+### ==========================================
+
+### 1. Listar todas las regiones (200 OK)
+GET http://localhost:8080/api/1/cliente-service/clientes/regiones
+
+### 2. Listar clientes con paginación (200 OK)
+GET http://localhost:8080/api/1/cliente-service/clientes?page=0&size=5
+
+### 3. Buscar cliente que NO existe (404 Not Found - JSON estructurado)
+GET http://localhost:8080/api/1/cliente-service/clientes/999
+
+### 4. Crear un cliente nuevo (201 Created)
+POST http://localhost:8080/api/1/cliente-service/clientes
+Content-Type: application/json
+
+{
+  "nombre": "Prueba",
+  "apellido": "Final",
+  "email": "prueba.final@test.com",
+  "foto": null,
+  "region": { "id": 1 }
+}
+
+### 5. Intentar crear el mismo cliente (409 Conflict - JSON estructurado)
+POST http://localhost:8080/api/1/cliente-service/clientes
+Content-Type: application/json
+
+{
+  "nombre": "Prueba",
+  "apellido": "Final",
+  "email": "prueba.final@test.com",
+  "foto": null,
+  "region": { "id": 1 }
+}
+
+### 6. Actualizar un cliente existente (200 OK)
+### ⚠️ IMPORTANTE: Cambia el "13" por el ID real del cliente que creaste en el paso 4.
+### Si no sabes el ID, revisa la consola o usa DBeaver.
+PUT http://localhost:8080/api/1/cliente-service/clientes/13
+Content-Type: application/json
+
+{
+  "nombre": "Prueba",
+  "apellido": "Actualizada",
+  "email": "prueba.actualizada@test.com",
+  "foto": null,
+  "region": { "id": 2 }
+}
+
+### 7. Actualizar un cliente que NO existe (404 Not Found - JSON estructurado)
+PUT http://localhost:8080/api/1/cliente-service/clientes/999
+Content-Type: application/json
+
+{
+  "nombre": "Prueba",
+  "apellido": "Actualizada",
+  "email": "prueba.actualizada@test.com",
+  "foto": null,
+  "region": { "id": 2 }
+}
+
+### 8. Eliminar un cliente existente (204 No Content)
+### ⚠️ Cambia el "13" por el ID real del cliente que creaste.
+DELETE http://localhost:8080/api/1/cliente-service/clientes/13
+
+### 9. Verificar que el cliente eliminado ya NO existe (404 Not Found)
+GET http://localhost:8080/api/1/cliente-service/clientes/13
+
+### 10. Verificar que la API sigue funcionando (200 OK)
+GET http://localhost:8080/api/1/cliente-service/clientes/regiones
+
+### DELETE de cliente inexistente
+DELETE http://localhost:8080/api/1/cliente-service/clientes/999
+
+### POST con datos válidos y createAt
+POST http://localhost:8080/api/1/cliente-service/clientes
+Content-Type: application/json
+
+{
+  "nombre": "Prueba",
+  "apellido": "Valida",
+  "email": "prueba.valida@test.com",
+  "createAt": "2024-01-01",
+  "foto": null,
+  "region": { "id": 1 }
+}
+###
+GET http://localhost:8080/api/1/cliente-service/clientes?page=0&size=5
