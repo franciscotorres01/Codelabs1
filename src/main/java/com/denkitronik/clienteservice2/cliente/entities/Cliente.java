@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.Date;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.Date;
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // El ID debe verse en el JSON
+    private Long id; // 👈 SIN @JsonIgnore para que la plataforma lo lea
 
     @NotEmpty(message = "El nombre no puede estar vacío")
     @Size(min = 3, max = 20, message = "El nombre debe tener entre 3 y 20 caracteres")

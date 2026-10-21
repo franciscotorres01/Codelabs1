@@ -4,8 +4,11 @@ import com.denkitronik.clienteservice2.cliente.entities.Cliente;
 import com.denkitronik.clienteservice2.cliente.entities.Region;
 import com.denkitronik.clienteservice2.cliente.exceptions.ClienteExistsException;
 import com.denkitronik.clienteservice2.cliente.exceptions.ClienteNotFoundException;
+import com.denkitronik.clienteservice2.cliente.exceptions.ClienteServiceException;
 import com.denkitronik.clienteservice2.cliente.repositories.IClienteDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,31 +22,34 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Cliente> findAll() {
-        return clienteDao.findAll();
+    public Page<Cliente> findAll(Pageable pageable) { // 👈 Aquí estaba el error, debe recibir el Pageable
+        return clienteDao.findAll(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Cliente findById(Long id) {
-        return clienteDao.findById(id)
-                .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado con ID: " + id));
+        return clienteDao.findById(id).orElseThrow(() -> new ClienteNotFoundException(id));
     }
 
     @Override
     @Transactional
     public Cliente save(Cliente cliente) {
         if (clienteDao.existsByEmail(cliente.getEmail())) {
-            throw new ClienteExistsException("El cliente con el email " + cliente.getEmail() + " ya existe");
+            throw new ClienteExistsException("El email " + cliente.getEmail() + " ya está registrado");
         }
-        return clienteDao.save(cliente);
+        try {
+            return clienteDao.save(cliente);
+        } catch (Exception e) {
+            throw new ClienteServiceException("Error al guardar el cliente");
+        }
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        if (!clienteDao.existsById(id)) {
-            throw new ClienteNotFoundException("Cliente no encontrado con ID: " + id);
+        if (!clienteDao.existsById(id)) { // Verificamos que exista para lanzar el 404
+            throw new ClienteNotFoundException(id);
         }
         clienteDao.deleteById(id);
     }

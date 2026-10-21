@@ -2,14 +2,12 @@ package com.denkitronik.clienteservice2.cliente.services;
 
 import com.denkitronik.clienteservice2.cliente.entities.Cliente;
 import com.denkitronik.clienteservice2.cliente.entities.Region;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IClienteService {
-
-    // Método simple para listar todos los clientes (sin paginación)
-    List<Cliente> findAll();
-
+    Page<Cliente> findAll(Pageable pageable); // Método con paginación
     Cliente findById(Long id);
     Cliente save(Cliente cliente);
     void delete(Long id);
