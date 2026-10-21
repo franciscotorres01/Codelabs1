@@ -100,10 +100,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
+                    <!-- Evita crear una JVM separada en el CI, solucionando el error 134 -->
+                    <forkCount>0</forkCount>
+                    <!-- Mantenemos la memoria extra por si acaso -->
                     <argLine>@{argLine} -Xmx1024m</argLine>
                 </configuration>
             </plugin>
-
             <!-- 👇 JACOCO: ÚNICA VERSIÓN (Solo como plugin) 👇 -->
             <plugin>
                 <groupId>org.jacoco</groupId>
