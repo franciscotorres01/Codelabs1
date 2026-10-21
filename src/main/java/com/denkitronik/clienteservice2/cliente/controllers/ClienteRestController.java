@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// IMPORTANTE: la ruta base debe coincidir con la que usan los tests (ver enunciado).
+// Ruta exigida por la plataforma: /api/v1/cliente-service/clientes
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/api/${api.version}/cliente-service/clientes")
 public class ClienteRestController {
 
     @Autowired
