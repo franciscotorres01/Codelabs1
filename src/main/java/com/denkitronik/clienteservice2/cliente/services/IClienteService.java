@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IClienteService {
-    Page<Cliente> findAll(Pageable pageable); // Método con paginación
+    Page<Cliente> findAll(Pageable pageable);
     Cliente findById(Long id);
     Cliente save(Cliente cliente);
     void delete(Long id);

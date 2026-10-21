@@ -47,20 +47,17 @@ public class ClienteRestController {
 
     @PutMapping("/clientes/{id}")
     public ResponseEntity<Cliente> actualizarCliente(@Valid @RequestBody Cliente cliente, @PathVariable Long id) {
-        Cliente clienteActual = clienteService.findById(id); // Lanza 404 si no existe
-
+        Cliente clienteActual = clienteService.findById(id);
         clienteActual.setNombre(cliente.getNombre());
         clienteActual.setApellido(cliente.getApellido());
         clienteActual.setEmail(cliente.getEmail());
         clienteActual.setRegion(cliente.getRegion());
-
         return ResponseEntity.ok(clienteService.save(clienteActual));
     }
 
     @DeleteMapping("/clientes/{id}")
     public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {
-        // Verificamos que exista primero para que lance la excepción 404 si no está
-        clienteService.findById(id);
+        clienteService.findById(id); // Lanza 404 si no existe
         clienteService.delete(id);
         return ResponseEntity.noContent().build();
     }

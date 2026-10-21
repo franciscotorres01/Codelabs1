@@ -8,10 +8,8 @@ import java.util.List;
 
 public interface IClienteDao extends JpaRepository<Cliente, Long> {
 
-    // Consulta JPQL personalizada para obtener todas las regiones
+    boolean existsByEmail(String email);
+
     @Query("from Region")
     List<Region> findAllRegiones();
-
-    // 👇 NUEVO: Método para verificar si un email ya existe
-    boolean existsByEmail(String email);
 }

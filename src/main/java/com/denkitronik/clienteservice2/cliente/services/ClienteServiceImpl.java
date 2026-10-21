@@ -22,7 +22,7 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Cliente> findAll(Pageable pageable) { // 👈 Aquí estaba el error, debe recibir el Pageable
+    public Page<Cliente> findAll(Pageable pageable) {
         return clienteDao.findAll(pageable);
     }
 
@@ -48,7 +48,7 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     @Transactional
     public void delete(Long id) {
-        if (!clienteDao.existsById(id)) { // Verificamos que exista para lanzar el 404
+        if (!clienteDao.existsById(id)) {
             throw new ClienteNotFoundException(id);
         }
         clienteDao.deleteById(id);

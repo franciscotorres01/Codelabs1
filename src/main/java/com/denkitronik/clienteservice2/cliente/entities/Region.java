@@ -6,8 +6,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "regiones")
-@Getter
-@Setter
+@Getter @Setter
 public class Region {
 
     @Id

@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.Date;
 
 @Entity
@@ -14,9 +13,10 @@ import java.util.Date;
 @JsonPropertyOrder({"id", "nombre", "apellido", "email", "foto", "region_id", "createAt"})
 @Getter @Setter
 public class Cliente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 👈 SIN @JsonIgnore para que la plataforma lo lea
+    private Long id;
 
     @NotEmpty(message = "El nombre no puede estar vacío")
     @Size(min = 3, max = 20, message = "El nombre debe tener entre 3 y 20 caracteres")
