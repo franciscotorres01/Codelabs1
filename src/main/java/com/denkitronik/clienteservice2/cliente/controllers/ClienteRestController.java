@@ -6,7 +6,6 @@ import com.denkitronik.clienteservice2.cliente.services.IClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,51 +13,50 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// IMPORTANTE: la ruta base debe coincidir con la que usan los tests (ver enunciado).
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
-@RequestMapping("/api/${api.version}/cliente-service")
+@RequestMapping("/api/clientes")
 public class ClienteRestController {
 
     @Autowired
     private IClienteService clienteService;
 
-    @GetMapping("/clientes/regiones")
+    @GetMapping
+    public Page<Cliente> index(Pageable pageable) {
+        return clienteService.findAll(pageable);
+    }
+
+    @GetMapping("/regiones")
     public List<Region> listarRegiones() {
         return clienteService.findAllRegiones();
     }
 
-    @GetMapping("/clientes")
-    public ResponseEntity<Page<Cliente>> listarClientes(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(clienteService.findAll(pageable));
+    @GetMapping("/{id}")
+    public ResponseEntity<Cliente> show(@PathVariable Long id) {
+        return ResponseEntity.ok(clienteService.findById(id)); // 404 vía excepción
     }
 
-    @GetMapping("/clientes/{id}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(clienteService.findById(id));
+    @PostMapping
+    public ResponseEntity<Cliente> create(@Valid @RequestBody Cliente cliente) {
+        cliente.setId(null); // fuerza creación
+        Cliente nuevo = clienteService.save(cliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
-    @PostMapping("/clientes")
-    public ResponseEntity<Cliente> crearCliente(@Valid @RequestBody Cliente cliente) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.save(cliente));
+    @PutMapping("/{id}")
+    public ResponseEntity<Cliente> update(@Valid @RequestBody Cliente cliente, @PathVariable Long id) {
+        Cliente actual = clienteService.findById(id); // 404 si no existe
+        actual.setNombre(cliente.getNombre());
+        actual.setApellido(cliente.getApellido());
+        actual.setEmail(cliente.getEmail());
+        actual.setCreateAt(cliente.getCreateAt());
+        actual.setRegion(cliente.getRegion());
+        return ResponseEntity.ok(clienteService.save(actual));
     }
 
-    @PutMapping("/clientes/{id}")
-    public ResponseEntity<Cliente> actualizarCliente(@Valid @RequestBody Cliente cliente, @PathVariable Long id) {
-        Cliente clienteActual = clienteService.findById(id);
-        clienteActual.setNombre(cliente.getNombre());
-        clienteActual.setApellido(cliente.getApellido());
-        clienteActual.setEmail(cliente.getEmail());
-        clienteActual.setRegion(cliente.getRegion());
-        return ResponseEntity.ok(clienteService.save(clienteActual));
-    }
-
-    @DeleteMapping("/clientes/{id}")
-    public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {
-        clienteService.findById(id); // Lanza 404 si no existe
-        clienteService.delete(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        clienteService.delete(id); // 404 si no existe
         return ResponseEntity.noContent().build();
     }
 }
