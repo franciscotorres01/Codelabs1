@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*; // 👈 Validaciones
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,15 +13,15 @@ import java.util.Date;
 
 @Entity
 @Table(name = "clientes")
-@JsonPropertyOrder({"nombre", "apellido", "email", "foto", "region_id"})
+// Agregamos "id" al orden para que aparezca en el JSON
+@JsonPropertyOrder({"id", "nombre", "apellido", "email", "foto", "region_id", "createAt"})
 @Getter
 @Setter
 public class Cliente implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
+    private Long id; // 👈 QUITAMOS EL @JsonIgnore
 
     @NotEmpty(message = "El nombre no puede estar vacío")
     @Size(min = 3, max = 20, message = "El nombre debe tener entre 3 y 20 caracteres")
@@ -39,8 +39,7 @@ public class Cliente implements Serializable {
 
     @Column(name = "create_at")
     @Temporal(TemporalType.DATE)
-    @JsonIgnore
-    private Date createAt; // Sin @NotNull para que el import.sql no falle
+    private Date createAt; //  QUITAMOS EL @JsonIgnore para que la fecha viaje
 
     private String foto;
 
