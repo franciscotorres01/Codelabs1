@@ -134,8 +134,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+                <configuration>
+                    <!-- Asigna hasta 1024 MB de memoria a la JVM de los tests -->
+                    <argLine>@{argLine} -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError</argLine>
+                </configuration>
             </plugin>
-
             <!-- JaCoCo para reportes de cobertura -->
             <plugin>
                 <groupId>org.jacoco</groupId>
