@@ -1,27 +1,21 @@
 package com.denkitronik.clienteservice2.cliente.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "clientes")
-// Agregamos "id" al orden para que aparezca en el JSON
 @JsonPropertyOrder({"id", "nombre", "apellido", "email", "foto", "region_id", "createAt"})
-@Getter
-@Setter
-public class Cliente implements Serializable {
-
+@Getter @Setter
+public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 👈 QUITAMOS EL @JsonIgnore
+    private Long id; // El ID debe verse en el JSON
 
     @NotEmpty(message = "El nombre no puede estar vacío")
     @Size(min = 3, max = 20, message = "El nombre debe tener entre 3 y 20 caracteres")
@@ -39,7 +33,7 @@ public class Cliente implements Serializable {
 
     @Column(name = "create_at")
     @Temporal(TemporalType.DATE)
-    private Date createAt; //  QUITAMOS EL @JsonIgnore para que la fecha viaje
+    private Date createAt;
 
     private String foto;
 

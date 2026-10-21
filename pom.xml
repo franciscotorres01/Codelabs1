@@ -15,12 +15,9 @@
     <description>cliente-service2</description>
     <properties>
         <java.version>17</java.version>
-        <maven.compiler.release>17</maven.compiler.release>
-        <lombok.version>1.18.42</lombok.version>
     </properties>
     <dependencies>
-        <!-- DEPENDENCIAS PRINCIPALES -->
-
+        <!-- Web, JPA, Validation, Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -37,41 +34,28 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <!-- Base de datos en memoria para pruebas -->
+        <!-- H2 para la plataforma de evaluación (En runtime para que lo encuentre) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-
-        <!-- TESTING -->
+        <!-- PostgreSQL por si lo pruebas localmente -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -84,8 +68,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-
-            <!-- Lombok Plugin -->
+            <!-- Plugin para procesar Lombok (getters y setters) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -95,43 +78,10 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
+                            <version>1.18.42</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
-
-            <!-- Surefire Plugin (Obligatorio para JaCoCo) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
-                <configuration>
-                    <!-- Evita crear una JVM separada en el CI, solucionando el error 134 -->
-                    <forkCount>0</forkCount>
-                    <!-- Mantenemos la memoria extra por si acaso -->
-                    <argLine>@{argLine} -Xmx1024m</argLine>
-                </configuration>
-            </plugin>
-            <!-- 👇 JACOCO: ÚNICA VERSIÓN (Solo como plugin) 👇 -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
