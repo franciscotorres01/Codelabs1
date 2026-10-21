@@ -18,6 +18,8 @@
         <maven.compiler.release>17</maven.compiler.release>
         <lombok.version>1.18.42</lombok.version>
         <testcontainers.version>1.19.7</testcontainers.version>
+        <!-- Vacío por defecto; el entorno de entrega puede inyectar su propio agente -->
+        <argLine></argLine>
     </properties>
     <dependencies>
         <!-- ===== DEPENDENCIAS PRINCIPALES ===== -->
@@ -136,20 +138,16 @@
                 <version>3.2.5</version>
                 <configuration>
                     <!-- Asigna hasta 1024 MB de memoria a la JVM de los tests -->
-                    <argLine>@{argLine} -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError</argLine>
+                    <argLine>@{argLine} -Xmx1024m</argLine>
                 </configuration>
             </plugin>
-            <!-- JaCoCo para reportes de cobertura -->
+
+            <!-- JaCoCo solo para el reporte (el agente lo aporta el entorno de entrega) -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
+                <version>0.8.12</version>
                 <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
                     <execution>
                         <id>report</id>
                         <phase>test</phase>
