@@ -17,7 +17,6 @@
         <java.version>17</java.version>
         <maven.compiler.release>17</maven.compiler.release>
         <lombok.version>1.18.42</lombok.version>
-        <testcontainers.version>1.19.7</testcontainers.version>
     </properties>
     <dependencies>
         <!-- DEPENDENCIAS PRINCIPALES -->
@@ -44,12 +43,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-docker-compose</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
@@ -61,45 +54,17 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- DEPENDENCIAS DE TESTING -->
+        <!-- TESTING -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-testcontainers</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- AQUI YA NO ESTA JACOCO COMO DEPENDENCIA -->
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -113,6 +78,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Lombok Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -128,17 +94,17 @@
                 </configuration>
             </plugin>
 
+            <!-- Surefire Plugin (Obligatorio para JaCoCo) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <!-- Memoria extra para evitar fallos en la plataforma -->
-                    <argLine>@{argLine} -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError</argLine>
+                    <argLine>@{argLine} -Xmx1024m</argLine>
                 </configuration>
             </plugin>
 
-            <!-- JACOCO SOLO COMO PLUGIN -->
+            <!-- 👇 JACOCO: ÚNICA VERSIÓN (Solo como plugin) 👇 -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
