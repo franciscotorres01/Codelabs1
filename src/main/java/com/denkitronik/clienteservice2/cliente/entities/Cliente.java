@@ -36,7 +36,7 @@ public class Cliente implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date createAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "region_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Region region;
